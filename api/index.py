@@ -19,6 +19,11 @@ def claim(init_data):
         return False, response.json()['detail']
     if response.headers.get("date") is None:
         return False, "Date Tidak Terdeteksi"
+    if response.text == "":
+        start_farm_response = requests.post("https://0xiceberg.store/api/v1/web-app/farming/", headers=headers)
+        if start_farm_response.status_code != 200:
+            return False, start_farm_response.json()['detail']
+        return True, start_farm_response.json()
     stop_date = datetime.strptime(response.json()['stop_time'], "%Y-%m-%dT%H:%M:%S.%fZ").timestamp()
     date_now = datetime.strptime(response.headers.get("date"), "%a, %d %b %Y %H:%M:%S %Z").timestamp()
     if int(date_now) >= int(stop_date):
@@ -28,7 +33,7 @@ def claim(init_data):
         start_farm_response = requests.post("https://0xiceberg.store/api/v1/web-app/farming/", headers=headers)
         if start_farm_response.status_code != 200:
             return False, start_farm_response.json()['detail']
-        return True, collect_response
+        return True, collect_response.json()
     seconds = int(stop_date) - int(date_now)
     hours = seconds // 3600
     seconds %= 3600
