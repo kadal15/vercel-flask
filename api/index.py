@@ -39,7 +39,7 @@ def claim(init_data):
     seconds %= 3600
     minutes = seconds // 60
     seconds %= 60
-    return False, f"Masih menunggu {hours}:{minutes:02}:{seconds:02} Detik Lagi"
+    return True, f"Masih menunggu {hours}:{minutes:02}:{seconds:02} Detik Lagi"
 
 @app.route('/')
 def hello_world():
